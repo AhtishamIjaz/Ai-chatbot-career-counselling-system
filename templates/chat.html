@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+
+{% block title %}Chat - CareerPath AI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="app-header">
+    <div class="container nav-container">
+        <div class="logo">
+            <div>
+                <div class="logo-text">CareerPath AI</div>
+                <div class="logo-tagline">Your Personal Career Guidance Assistant</div>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+            <li><a href="{{ url_for('chat') }}" class="active">Chat</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            <li class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">{{ username[0]|upper }}</div>
+                    <span>{{ full_name or username }}</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container main-layout">
+    <!-- Left Sidebar - User Profile -->
+    <aside class="sidebar">
+        <div class="sidebar-section" id="profile">
+            <h3 class="sidebar-title">Your Profile</h3>
+            <div class="profile-form">
+                <input type="text" id="educationalBackground" placeholder="Educational Background (e.g., FSC Pre-Medical)">
+                <textarea id="userInterests" placeholder="Your interests and skills (comma-separated)..." rows="3"></textarea>
+                <button class="save-profile-btn" id="saveProfileBtn">Save Profile</button>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title">Chat History</h3>
+            <div id="chatHistory">
+                <!-- History will be loaded here -->
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Chat Interface -->
+    <main>
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3>Career Counseling Assistant</h3>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-bubble">
+                        Welcome! I'm your career counselor assistant. I can help you explore career options, 
+                        understand different fields, and guide you toward making informed career decisions.
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea 
+                        class="chat-input" 
+                        id="messageInput" 
+                        placeholder="Type your career question here..." 
+                        rows="1"
+                    ></textarea>
+                    <button class="send-button" id="sendButton">Send</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Right Sidebar - Suggested Questions -->
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="sidebar-title">Suggested Questions</h3>
+            <div class="suggested-questions" id="suggestedQuestions">
+                <!-- Questions will be loaded here -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-title">Quick Resources</h3>
+            <div class="suggested-questions">
+                <button class="question-btn" onclick="loadResource('career_guide')">📚 Download Career Guide</button>
+                <button class="question-btn" onclick="loadResource('trends')">📈 Industry Trends 2024</button>
+                <button class="question-btn" onclick="loadResource('universities')">🎓 Top Universities</button>
+            </div>
+        </div>
+    </aside>
+</div>
+
+<!-- Scripts for Chat Functionality -->
+<script>
+// Helper to escape HTML
+function escapeHtml(unsafe) {
+    return unsafe
+         .replaceAll('&', "&amp;")
+         .replaceAll('<', "&lt;")
+         .replaceAll('>', "&gt;")
+         .replaceAll('"', "&quot;")
+         .replaceAll("'", "&#039;");
+}
+
+// Send message to backend
+async function sendMessage() {
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    if (!message) return;
+
+    // Show user message in chat
+    const chatMessages = document.getElementById('chatMessages');
+    chatMessages.insertAdjacentHTML('beforeend', `
+        <div class="message user">
+            <div class="message-bubble">${escapeHtml(message)}</div>
+        </div>
+    `);
+    messageInput.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+
+        if (data.response) {
+            chatMessages.insertAdjacentHTML('beforeend', `
+                <div class="message assistant">
+                    <div class="message-bubble">${escapeHtml(data.response)}</div>
+                </div>
+            `);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            // reload history so left panel updates
+            loadChatHistory();
+        } else {
+            alert('Error: ' + (data.error || 'Unknown error'));
+        }
+    } catch (err) {
+        alert('Error connecting to backend: ' + err.message);
+    }
+}
+
+// UI: send on button click or Enter
+document.getElementById('sendButton').addEventListener('click', sendMessage);
+document.getElementById('messageInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+// Load suggested questions
+async function loadSuggestedQuestions() {
+    try {
+        const res = await fetch('/api/suggested-questions');
+        const questions = await res.json();
+        const container = document.getElementById('suggestedQuestions');
+        container.innerHTML = '';
+        questions.forEach(q => {
+            const btn = document.createElement('button');
+            btn.className = 'question-btn';
+            btn.innerText = q;
+            btn.onclick = () => { document.getElementById('messageInput').value = q; sendMessage(); };
+            container.appendChild(btn);
+        });
+    } catch (err) {
+        console.log('Error loading suggested questions:', err);
+    }
+}
+
+// Load chat history (left sidebar)
+async function loadChatHistory() {
+    try {
+        const res = await fetch('/api/history');
+        const history = await res.json();
+        const container = document.getElementById('chatHistory');
+        container.innerHTML = '';
+        if (!Array.isArray(history) || history.length === 0) {
+            container.innerHTML = '<p style="color: #718096; font-style: italic; text-align: center;">No chat history yet</p>';
+            return;
+        }
+        // show latest messages grouped (or just user messages preview)
+        history.forEach(msg => {
+            const div = document.createElement('div');
+            div.style.padding = '8px';
+            div.style.borderBottom = '1px solid #e2e8f0';
+            div.style.cursor = 'pointer';
+            const short = msg.text.length > 60 ? msg.text.substring(0, 60) + '...' : msg.text;
+            div.textContent = short;
+            // on click put message into input
+            div.onclick = () => {
+                document.getElementById('messageInput').value = msg.text;
+                document.getElementById('messageInput').focus();
+            };
+            container.appendChild(div);
+        });
+    } catch (err) {
+        console.log('Error loading chat history:', err);
+    }
+}
+
+// Load and save user profile
+async function loadUserProfile() {
+    try {
+        const res = await fetch('/api/user-profile');
+        if (!res.ok) return;
+        const user = await res.json();
+        document.getElementById('educationalBackground').value = user.educational_background || '';
+        document.getElementById('userInterests').value = (user.interests || []).join(', ');
+    } catch (err) {
+        console.log('Error loading user profile:', err);
+    }
+}
+
+async function saveUserProfile() {
+    const educational_background = document.getElementById('educationalBackground').value.trim();
+    const raw = document.getElementById('userInterests').value.trim();
+    const interests = raw ? raw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+    try {
+        const res = await fetch('/api/update-profile', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ educational_background, interests })
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert('Profile updated successfully!');
+        } else {
+            alert('Failed to update profile');
+        }
+    } catch (err) {
+        console.log('Error saving profile:', err);
+        alert('Error saving profile');
+    }
+}
+
+document.getElementById('saveProfileBtn').addEventListener('click', saveUserProfile);
+
+// Utility
+function loadResource(type) {
+    const resources = { career_guide: 'Career Guide', trends: 'Industry Trends 2024', universities: 'Top Universities' };
+    alert(`Downloading ${resources[type]}... (not implemented)`);
+}
+
+// On load
+window.addEventListener('load', () => {
+    loadSuggestedQuestions();
+    loadChatHistory();
+    loadUserProfile();
+});
+</script>
+{% endblock %}

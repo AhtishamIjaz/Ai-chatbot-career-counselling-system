@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - CareerPath AI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="app-header">
+    <div class="container nav-container">
+        <div class="logo">
+            <div>
+                <div class="logo-text">CareerPath AI</div>
+                <div class="logo-tagline">Your Personal Career Guidance Assistant</div>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+            <li><a href="{{ url_for('chat') }}">Chat</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            <li><a href="{{ url_for('contact') }}" class="active">Contact</a></li>
+            {% if username %}
+            <li class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">{{ username[0]|upper }}</div>
+                    <span>{{ full_name or username }}</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </li>
+            {% else %}
+            <li class="user-menu">
+                <a href="{{ url_for('login') }}" class="nav-btn secondary">Login</a>
+                <a href="{{ url_for('signup') }}" class="nav-btn primary">Sign Up</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container" style="margin-top: 100px; padding: 2rem 0;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div style="background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 3rem;">
+            <h1 style="color: var(--primary-blue); margin-bottom: 1rem;">Contact Us</h1>
+            <p style="color: var(--dark-gray); line-height: 1.6; margin-bottom: 2rem;">
+                We'd love to hear from you! Whether you have questions, feedback, or need support, 
+                our team is here to help you on your career journey.
+            </p>
+
+            <div style="display: grid; gap: 2rem; margin-bottom: 3rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                    <div style="padding: 1.5rem; background: var(--light-gray); border-radius: 8px;">
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 1rem;">📧 Email</h3>
+                        <p style="color: var(--dark-gray); margin-bottom: 0.5rem;">General Inquiries</p>
+                        <a href="mailto:info@careerpathai.com" style="color: var(--primary-blue); text-decoration: none;">rahiiiraja123@gmail.com</a>
+                        
+                        <p style="color: var(--dark-gray); margin: 1rem 0 0.5rem;">Technical Support</p>
+                        <a href="mailto:support@careerpathai.com" style="color: var(--primary-blue); text-decoration: none;">support@careerpathai.com</a>
+                    </div>
+
+                    <div style="padding: 1.5rem; background: var(--light-gray); border-radius: 8px;">
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 1rem;">📞 Phone</h3>
+                        <p style="color: var(--dark-gray); margin-bottom: 0.5rem;">Customer Support</p>
+                        <a href="tel:+1234567890" style="color: var(--primary-blue); text-decoration: none;">+923434377512</a>
+                        
+                        <p style="color: var(--dark-gray); margin: 1rem 0 0.5rem;">Business Inquiries</p>
+                        <a href="tel:+1234567891" style="color: var(--primary-blue); text-decoration: none;">+923149799265</a>
+                    </div>
+
+                    <div style="padding: 1.5rem; background: var(--light-gray); border-radius: 8px;">
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 1rem;">🕒 Office Hours</h3>
+                        <p style="color: var(--dark-gray); margin-bottom: 0.5rem;">Monday - Friday</p>
+                        <p style="color: var(--dark-gray);">9:00 AM - 6:00 PM EST</p>
+                        
+                        <p style="color: var(--dark-gray); margin: 1rem 0 0.5rem;">Weekend Support</p>
+                        <p style="color: var(--dark-gray);">10:00 AM - 4:00 PM EST</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 2rem; background: var(--light-gray); border-radius: 8px;">
+                <h2 style="color: var(--primary-blue); margin-bottom: 1.5rem;">Frequently Asked Questions</h2>
+                
+                <div style="display: grid; gap: 1rem;">
+                    <div>
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 0.5rem;">How accurate are the career recommendations?</h3>
+                        <p style="color: var(--dark-gray); line-height: 1.6;">
+                            Our AI system is trained on comprehensive career data and continuously updated with the latest 
+                            industry trends. However, we recommend using our suggestions as a starting point for your 
+                            research and consulting with human career counselors for major decisions.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 0.5rem;">Is my personal information safe?</h3>
+                        <p style="color: var(--dark-gray); line-height: 1.6;">
+                            Yes, we take data privacy very seriously. All your information is encrypted and stored securely. 
+                            We never share your personal data with third parties without your explicit consent.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 0.5rem;">Can I use CareerPath AI for free?</h3>
+                        <p style="color: var(--dark-gray); line-height: 1.6;">
+                            Yes! Our basic career counseling services are completely free. We may offer premium features 
+                            in the future, but the core functionality will always remain accessible to everyone.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--secondary-teal); margin-bottom: 0.5rem;">How often is the career information updated?</h3>
+                        <p style="color: var(--dark-gray); line-height: 1.6;">
+                            Our database is updated quarterly with the latest salary information, job market trends, 
+                            and emerging career fields. We also incorporate user feedback to improve our recommendations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center;">
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Can't find what you're looking for?</h3>
+                <p style="color: var(--dark-gray); margin-bottom: 1.5rem;">
+                    Our AI assistant is available 24/7 to answer your career questions.
+                </p>
+                {% if username %}
+                <a href="{{ url_for('chat') }}" class="cta-button primary">Chat with Assistant</a>
+                {% else %}
+                <a href="{{ url_for('signup') }}" class="cta-button primary">Get Started Free</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

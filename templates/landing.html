@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}CareerPath AI - Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" style="background: var(--light-blue); padding: 6rem 2rem; text-align: center;">
+    <div class="container" style="max-width: 900px; margin: 0 auto;">
+        <h1 style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 1rem;">
+            Welcome to CareerPath AI
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--dark-gray); line-height: 1.6; margin-bottom: 2rem;">
+            Your AI-powered personal career guidance assistant. Explore career paths, understand opportunities,
+            and make informed decisions for your future.
+        </p>
+        {% if username %}
+        <a href="{{ url_for('chat') }}" class="cta-button primary">Start Chatting</a>
+        {% else %}
+        <a href="{{ url_for('signup') }}" class="cta-button primary" style="margin-right: 1rem;">Get Started Free</a>
+        <a href="{{ url_for('login') }}" class="cta-button secondary">Login</a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section" style="padding: 4rem 2rem; background: white;">
+    <div class="container" style="max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <div class="feature-card" style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">🎯 Personalized Career Guidance</h3>
+            <p style="color: var(--dark-gray); line-height: 1.6;">
+                Get career recommendations tailored to your educational background, interests, and skills.
+            </p>
+        </div>
+        <div class="feature-card" style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">🤖 AI-Powered Assistance</h3>
+            <p style="color: var(--dark-gray); line-height: 1.6;">
+                Our advanced AI system understands your questions and provides detailed answers about career options.
+            </p>
+        </div>
+        <div class="feature-card" style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">📚 Comprehensive Resources</h3>
+            <p style="color: var(--dark-gray); line-height: 1.6;">
+                Access detailed information about various educational paths, career trends, and skill requirements.
+            </p>
+        </div>
+        <div class="feature-card" style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+            <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">🔒 Privacy & Security</h3>
+            <p style="color: var(--dark-gray); line-height: 1.6;">
+                Your data and conversations are securely stored and never shared without your consent.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Call-to-Action Section -->
+<section class="cta-section" style="padding: 4rem 2rem; background: var(--secondary-teal); text-align: center; color: white;">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Ready to Explore Your Career Path?</h2>
+    <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+        Join thousands of users who are making informed career decisions with CareerPath AI.
+    </p>
+    {% if username %}
+    <a href="{{ url_for('chat') }}" class="cta-button primary" style="background: white; color: var(--secondary-teal);">Start Chatting</a>
+    {% else %}
+    <a href="{{ url_for('signup') }}" class="cta-button primary" style="margin-right: 1rem;">Get Started Free</a>
+    <a href="{{ url_for('login') }}" class="cta-button secondary">Login</a>
+    {% endif %}
+</section>
+
+<!-- Testimonials Section (Optional) -->
+<section class="testimonials-section" style="padding: 4rem 2rem; background: white;">
+    <div class="container" style="max-width: 900px; margin: 0 auto; text-align: center;">
+        <h2 style="color: var(--primary-blue); margin-bottom: 2rem;">What Our Users Say</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+                <p style="color: var(--dark-gray); line-height: 1.6;">"CareerPath AI helped me find my dream career path after high school. It's amazing!"</p>
+                <strong>- Sarah K.</strong>
+            </div>
+            <div style="background: var(--light-gray); padding: 2rem; border-radius: 12px; box-shadow: var(--shadow);">
+                <p style="color: var(--dark-gray); line-height: 1.6;">"The AI suggestions are accurate and really helped me understand my strengths."</p>
+                <strong>- Ahmed R.</strong>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

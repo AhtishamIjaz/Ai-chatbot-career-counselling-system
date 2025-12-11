@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}About - CareerPath AI{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="app-header">
+    <div class="container nav-container">
+        <div class="logo">
+            <div>
+                <div class="logo-text">CareerPath AI</div>
+                <div class="logo-tagline">Your Personal Career Guidance Assistant</div>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+            <li><a href="{{ url_for('chat') }}">Chat</a></li>
+            <li><a href="{{ url_for('about') }}" class="active">About</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            {% if username %}
+            <li class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">{{ username[0]|upper }}</div>
+                    <span>{{ full_name or username }}</span>
+                </div>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </li>
+            {% else %}
+            <li class="user-menu">
+                <a href="{{ url_for('login') }}" class="nav-btn secondary">Login</a>
+                <a href="{{ url_for('signup') }}" class="nav-btn primary">Sign Up</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container" style="margin-top: 100px; padding: 2rem 0;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div style="background: white; border-radius: 12px; box-shadow: var(--shadow); padding: 3rem;">
+            <h1 style="color: var(--primary-blue); margin-bottom: 1rem;">About CareerPath AI</h1>
+            <p style="color: var(--dark-gray); line-height: 1.6; margin-bottom: 2rem;">
+                CareerPath AI is an innovative platform that combines artificial intelligence with career counseling expertise 
+                to help students and professionals make informed career decisions.
+            </p>
+
+            <div style="display: grid; gap: 2rem;">
+                <div>
+                    <h2 style="color: var(--secondary-teal); margin-bottom: 1rem;">🎯 Our Mission</h2>
+                    <p style="color: var(--dark-gray); line-height: 1.6;">
+                        To democratize career guidance by providing accessible, personalized, and data-driven career counseling 
+                        to everyone, regardless of their background or location.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: var(--secondary-teal); margin-bottom: 1rem;">🤖 How It Works</h2>
+                    <p style="color: var(--dark-gray); line-height: 1.6;">
+                        Our AI-powered system analyzes your educational background, interests, and career aspirations to provide 
+                        personalized recommendations. Using advanced natural language processing, we can understand your questions 
+                        and provide comprehensive answers about various career paths.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: var(--secondary-teal); margin-bottom: 1rem;">💡 Key Features</h2>
+                    <ul style="color: var(--dark-gray); line-height: 1.6; padding-left: 1.5rem;">
+                        <li><strong>Personalized Career Matching:</strong> Get career recommendations based on your unique profile</li>
+                        <li><strong>Comprehensive Database:</strong> Access information on thousands of careers and educational paths</li>
+                        <li><strong>24/7 Availability:</strong> Get career guidance whenever you need it</li>
+                        <li><strong>Progress Tracking:</strong> Monitor your career exploration journey</li>
+                        <li><strong>Expert Knowledge:</strong> Built with insights from career counseling professionals</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2 style="color: var(--secondary-teal); margin-bottom: 1rem;">🔒 Privacy & Security</h2>
+                    <p style="color: var(--dark-gray); line-height: 1.6;">
+                        We take your privacy seriously. All your conversations and personal information are securely stored 
+                        and never shared with third parties without your consent.
+                    </p>
+                </div>
+
+                <div>
+                    <h2 style="color: var(--secondary-teal); margin-bottom: 1rem;">🚀 Our Vision</h2>
+                    <p style="color: var(--dark-gray); line-height: 1.6;">
+                        We envision a world where every individual has access to quality career guidance, enabling them to 
+                        pursue fulfilling careers that align with their passions, skills, and aspirations.
+                    </p>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: var(--light-gray); border-radius: 8px;">
+                <h3 style="color: var(--primary-blue); margin-bottom: 1rem;">Ready to Start Your Journey?</h3>
+                <p style="color: var(--dark-gray); margin-bottom: 1.5rem;">
+                    Join thousands of users who have discovered their perfect career path with CareerPath AI.
+                </p>
+                {% if username %}
+                <a href="{{ url_for('chat') }}" class="cta-button primary">Start Chatting</a>
+                {% else %}
+                <a href="{{ url_for('signup') }}" class="cta-button primary">Get Started Free</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
